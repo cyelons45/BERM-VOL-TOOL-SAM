@@ -1,0 +1,48 @@
+.print:link,
+.print:visited {
+    text-decoration: none;
+    color: #fff;
+}
+
+.print:hover {
+    color: #F05C5A;
+    font-weight: 300i;
+}
+
+.print:active {
+    transform: translateY(2px);
+    font-size: 1.6rem;
+}
+
+.print__page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.print__page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90vh;
+    width: 70vw;
+    margin: 2rem;
+    border: 1px solid black;
+}
+
+.print__head {
+    display: flex;
+    width: 100%;
+    height: 6rem;
+    background-color: #f5f6f8;
+    justify-content: space-between;
+}
+
+.print__head-logo {
+    background-color: #e0d7ca;
+}
+
+.print__head-name {
+    background-color: #9487de;
+}

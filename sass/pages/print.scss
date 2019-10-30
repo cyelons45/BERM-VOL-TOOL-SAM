@@ -1,0 +1,215 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////PRINT
+// @media print {
+//     @page {
+//         // size: A4 portrait;
+//         size: A4 landscape;
+//         max-height: 100%;
+//         max-width: 100%;
+//         border-collapse: collapse;
+//     }
+//     body {
+//         width: 100%;
+//         height: 100%;
+//     }
+// }
+.print__main {
+    position: absolute;
+    background-color: rgb(247, 242, 242);
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    border: 1px solid #006699;
+    display: none;
+    box-shadow: 5px 10px 5px rgba(0, 0, 0, 0.3);
+    color: rgb(51, 49, 49);
+}
+
+.print__main-template {
+    // background-color: aqua;
+    height: 100%;
+    width: 100%;
+    &-box {
+        height: 100%;
+        width: 100%;
+    }
+    &-box {
+        padding: 2rem 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
+.layout_template {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    &-titlelabel {
+        width: 100%;
+        height: 2.5rem;
+    }
+    &-titleinput {
+        width: 100%;
+        height: 2.5rem;
+    }
+    &-pagesetuplabel {
+        width: 100%;
+        height: 2.5rem;
+    }
+    &-pagesetupinput {
+        width: 100%;
+        height: 2.5rem;
+    }
+    &-formatlabel {
+        width: 100%;
+        height: 2.5rem;
+    }
+    &-formatinput {
+        width: 100%;
+        height: 2.5rem;
+    }
+    &-button {
+        width: 50%;
+        height: 2.5rem;
+    }
+}
+
+.export {
+    margin-top: 2rem;
+    &-text {
+        font-weight: 700;
+    }
+    &-results {
+        margin-top: 2rem;
+        height: 5rem;
+        background-color: rgb(235, 227, 227);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-results-text a {
+        color: black !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+    }
+}
+
+// .layout_template-button {
+//     height: 2.5rem;
+// }
+.print__main-box {
+    width: 100%;
+}
+
+// .print__main-preview {
+//     height: 30rem;
+//     width: 60rem;
+//     object-fit: cover;
+//     background-color: blue
+// }
+#canvas {
+    height: 100%;
+    width: 100%;
+}
+
+#print {
+    color: #fff;
+    transition: all 0.4s;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    background-color: #006699;
+}
+
+#print:hover {
+    box-shadow: 5px 8px 10px rgba(0, 0, 0, 0.3);
+}
+
+#print:active {
+    box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.5);
+    outline: none;
+    transform: translateY(2px);
+    -webkit-transform: translateY(2px);
+    -moz-transform: translateY(2px);
+    -ms-transform: translateY(2px);
+    -o-transform: translateY(2px);
+}
+
+#export {
+    padding: 1rem 3rem;
+    margin-left: 1rem;
+    background-color: cadetblue;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    outline: none;
+}
+
+// .print__page {
+//     display: flex;
+//     justify-content: center;
+//     height: 100%;
+//     width: 100%;
+//     &-container {
+//         border-collapse: collapse;
+//         display: flex;
+//         flex-direction: column;
+//         justify-content: flex-start;
+//         width: 867px;
+//         height: 95vh;
+//     }
+// }
+// .print__head {
+//     display: flex;
+//     width: 100%;
+//     height: 5rem;
+//     background-color: #006699;
+//     justify-content: space-between;
+//     &-logo {
+//         height: 5rem;
+//         padding: 2px;
+//         // background-color: #F05C5A;
+//     }
+// ;
+// &-name {
+//     display: flex;
+//     color: #fff;
+//     // background-color: #F05C5A;
+//     justify-content: center;
+//     flex-direction: column;
+//     align-items: center;
+//     // background-color: rgb(148, 135, 222);
+// }
+//     ;
+//     &-logo_img {
+//         height: 4.5rem;
+//     }
+// }
+// .beachName {
+//     text-transform: uppercase;
+//     font-weight: 400;
+//     // background-color: #F05C5A;
+//     // margin: 2px auto;
+// }
+// .map {
+//     // height: calc(90vh - 21rem - 6rem);
+//     height: 80vh;
+//     width: 100%;
+//     &_mapView {
+//         height: 100%;
+//         width: 100%;
+//     }
+// }
+// .profile__area {
+//     height: 18.2rem;
+//     width: 100%;
+//     &-graph {
+//         height: 100%;
+//         width: 100%;
+//     }
+// }
