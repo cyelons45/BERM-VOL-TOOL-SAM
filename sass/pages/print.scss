@@ -13,6 +13,34 @@
 //         height: 100%;
 //     }
 // }
+@-moz-document url-prefix() {
+    @media only print {
+        body {
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+            /*chrome & webkit browsers*/
+            color-adjust: exact;
+        }
+    }
+}
+
+// @media only print {
+//     .infoVolResults,
+//     .infoBeachName {
+//         color: white !important;
+//         -webkit-print-color-adjust: exact;
+//         color-adjust: exact;
+//     }
+// }
+// @supports (-moz-appearance:meterbar) {
+//     body {
+//         color: black !important;
+//         -webkit-print-color-adjust: exact;
+//         /*chrome & webkit browsers*/
+//         color-adjust: exact;
+//         /*firefox & IE */
+//     }
+// }
 .print__main {
     position: absolute;
     background-color: rgb(247, 242, 242);
@@ -23,10 +51,18 @@
     display: none;
     box-shadow: 5px 10px 5px rgba(0, 0, 0, 0.3);
     color: rgb(51, 49, 49);
+    width: 40rem;
+    @include respond(mini-phone) {
+        width: 30rem;
+    }
+    @include respond(phone-tiny) {
+        width: 30rem;
+    }
 }
 
 .print__main-template {
     // background-color: aqua;
+    border: 1px solid #006699;
     height: 100%;
     width: 100%;
     &-box {
@@ -46,13 +82,22 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+    // justify-content: flex-start;
+    // align-items: flex-start;
     &-titlelabel {
         width: 100%;
         height: 2.5rem;
     }
     &-titleinput {
         width: 100%;
+        // padding: 1rem auto;
         height: 2.5rem;
+        @include respond(phone) {
+            height: 2.5rem;
+        }
+        @include respond(mini-phone) {
+            height: 2.5rem;
+        }
     }
     &-pagesetuplabel {
         width: 100%;
@@ -60,6 +105,7 @@
     }
     &-pagesetupinput {
         width: 100%;
+        // padding: 2rem auto;
         height: 2.5rem;
     }
     &-formatlabel {
@@ -68,11 +114,48 @@
     }
     &-formatinput {
         width: 100%;
+        // padding: 3rem auto;
         height: 2.5rem;
+        @include respond(phone) {
+            height: 2.5rem;
+        }
+        @include respond(mini-phone) {
+            height: 2.5rem;
+        }
     }
-    &-button {
-        width: 50%;
-        height: 2.5rem;
+    // &-button {
+    //     width: 50%;
+    //     height: 2.5rem;
+    // }
+}
+
+.layout_template-titlelabel {
+    @include respond(phone) {
+        font-size: 2.0rem;
+        padding-bottom: 1rem;
+    }
+    @include respond(mini-phone) {
+        font-size: 2.0rem;
+        padding-bottom: 1rem;
+    }
+    @include respond(phone-tiny) {
+        font-size: 2.0rem;
+        padding-bottom: 1rem;
+    }
+}
+
+.layout_template-pagesetuplabel {
+    @include respond(phone) {
+        font-size: 2.0rem;
+        padding-bottom: 1rem;
+    }
+    @include respond(mini-phone) {
+        font-size: 2.0rem;
+        padding-bottom: 1rem;
+    }
+    @include respond(phone-tiny) {
+        font-size: 2.0rem;
+        padding-bottom: 1rem;
     }
 }
 
@@ -96,26 +179,122 @@
     }
 }
 
+#submitBtn {
+    border-radius: 10px;
+    align-self: flex-start;
+    padding: 1rem 3rem;
+    border: none;
+    color: white;
+    background-color: #F05C5A;
+    outline: none;
+    @include respond(phone) {
+        padding: 1rem 3rem;
+        border-radius: 10px;
+    }
+}
+
+#submitBtn:hover {
+    box-shadow: 5px 8px 10px rgba(0, 0, 0, 0.3);
+}
+
+#submitBtn:active {
+    box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.5);
+    outline: none;
+    transform: translateY(2px);
+    -webkit-transform: translateY(2px);
+    -moz-transform: translateY(2px);
+    -ms-transform: translateY(2px);
+    -o-transform: translateY(2px);
+}
+
 // .layout_template-button {
 //     height: 2.5rem;
 // }
 .print__main-box {
     width: 100%;
+    height: 100%;
+    // padding-bottom: 2rem;
+    @include respond(phone) {
+        // height: 30rem;
+    }
+    @include respond(mini-phone) {
+        // height: 30rem;
+    }
+    @include respond(phone-tiny) {
+        // height: 30rem;
+    }
 }
 
-// .print__main-preview {
-//     height: 30rem;
-//     width: 60rem;
-//     object-fit: cover;
-//     background-color: blue
-// }
+.print__main-box {
+    width: 100%;
+    @include respond(phone) {
+        height: 30rem;
+    }
+    @include respond(mini-phone) {
+        height: 30rem;
+    }
+    @include respond(phone-tiny) {
+        height: 30rem;
+    }
+}
+
+.print__main {
+    height: 30rem;
+    @include respond(phone) {
+        height: 30rem;
+    }
+    @include respond(mini-phone) {
+        height: 30rem;
+    }
+    @include respond(phone-tiny) {
+        height: 30rem;
+    }
+}
+
+.print__main-preview {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    justify-content: space-between;
+    // background-color: rgb(230, 230, 240)
+}
+
+#printImage {
+    height: 100%;
+    width: 100%;
+}
+
+.displayBox {
+    display: flex;
+    flex: 1;
+    // background-color: aqua;
+    width: 100%;
+}
+
 #canvas {
     height: 100%;
     width: 100%;
 }
 
+// .viewPort {
+//     width: 40%;
+//     background-color: brown;
+//     object-fit: cover;
+//     overflow: hidden;
+// }
+#imgDim {
+    object-fit: cover;
+}
+
+// .chartPort {
+//     width: 80%;
+//     // height: 15rem;
+//     // background-color: rgb(216, 207, 207);
+// }
 #print {
-    color: #fff;
+    color: white;
     transition: all 0.4s;
     -webkit-transition: all 0.4s;
     -moz-transition: all 0.4s;
@@ -150,66 +329,402 @@
     outline: none;
 }
 
-// .print__page {
-//     display: flex;
-//     justify-content: center;
-//     height: 100%;
-//     width: 100%;
-//     &-container {
-//         border-collapse: collapse;
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: flex-start;
-//         width: 867px;
-//         height: 95vh;
-//     }
-// }
-// .print__head {
-//     display: flex;
+.printInformation {
+    margin-left: 30%;
+    font-size: 1.6rem;
+    @include respond(tab-land) {
+        margin-left: 10%;
+        font-size: 1.3rem;
+    }
+    @include respond(phone) {
+        margin-left: 5%;
+        font-size: 1.2rem;
+    }
+    @include respond(mini-phone) {
+        margin-left: 2%;
+        font-size: 1.0rem;
+    }
+    @include respond(phone-tiny) {
+        margin-left: 1%;
+        font-size: 0.8rem;
+    }
+}
+
+.printContainer {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.printMenu {
+    height: 6rem;
+    width: 100vw;
+    background-color: rgb(174, 248, 223);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5rem;
+    z-index: 900;
+    @include respond(tab-land) {
+        padding-right: 5rem;
+    }
+    @include respond(phone) {
+        padding-right: 2rem;
+    }
+    @include respond(mini-phone) {
+        padding-right: 1rem;
+    }
+}
+
+.infoVolResults,
+.infoBeachName {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+@media only print {
+    .infoVolResults,
+    .infoBeachName {
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+
+#volResultsForPrint {
+    align-self: flex-end;
+    padding-left: 1rem;
+    justify-content: end;
+}
+
+#volResultsForPrint {
+    font-size: 2rem;
+    color: #F05C5A;
+}
+
+#nameOfBeach {
+    margin-left: 1rem
+}
+
+.printBtn {
+    // height: 3rem;
+    // width: 8rem;
+    font-size: 1.6rem;
+    padding: 1rem 3rem;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    // @include respond(tab-land) {
+    //     padding: 1rem 3rem;
+    // }
+    @include respond(phone) {
+        padding: .8rem 2rem;
+        font-size: 1.2rem;
+    }
+    @include respond(mini-phone) {
+        padding: .8rem 1.5rem;
+        font-size: 1.0rem;
+    }
+    @include respond(phone-tiny) {
+        padding: .5rem 1rem;
+        font-size: .8rem;
+    }
+}
+
+.printBtn:focus {
+    outline-color: none;
+}
+
+.printBtn:first-child {
+    margin-right: 2rem;
+    @include respond(phone) {
+        margin-right: 1rem;
+    }
+    // @include respond(mini-phone) {
+    //     margin-right: 2rem;
+    // }
+    // @include respond(phone-tiny) {
+    //     margin-right: 2rem;
+    // }
+}
+
+.printTemplate {
+    // background-color: aqua;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // overflow: hidden;
+    border: 1px solid rgb(50, 7, 243);
+    width: 80%;
+}
+
+.mapDiv {
+    // flex: 1;
+    width: 100%;
+    overflow: hidden;
+}
+
+.chartDiv {
+    // background-color: rgb(146, 155, 155);
+    width: 100%;
+    margin: 0px;
+    object-fit: cover;
+}
+
+#canToImage {
+    width: 100%;
+    height: 100%;
+}
+
+.printMenu-bar {
+    // margin-top: 10rem;
+    // height: 10rem;
+    width: 100%;
+    position: relative;
+    // background-color: #006699 !important;
+    color: white;
+    // padding: 5px;
+    height: 5rem;
+    @include respond(tab-land) {
+        height: 4rem;
+    }
+    @include respond(phone) {
+        height: 3rem;
+    }
+    @include respond(mini-phone) {
+        height: 2rem;
+    }
+}
+
+.printMenu-bar-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    @include respond(tab-land) {
+        height: 4rem;
+    }
+    @include respond(phone) {
+        height: 3rem;
+    }
+    @include respond(mini-phone) {
+        height: 3rem;
+    }
+}
+
+.logoBox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    // justify-content: center;
+    width: 100%;
+    // background-color: #006699;
+    // height: 5rem;
+    // background-color: red;
+    align-items: center;
+    justify-content: space-between;
+    // padding: 1px;
+    // padding: 2px;
+    text-transform: uppercase;
+    padding: 5px 2rem // border-bottom: 1px solid #fff;
+}
+
+.logoBox img {
+    height: 4rem;
+    opacity: 1;
+    @include respond(tab-land) {
+        height: 3rem;
+    }
+    @include respond(phone) {
+        height: 2rem;
+    }
+    @include respond(mini-phone) {
+        height: 2rem;
+    }
+}
+
+.templateBox {
+    // margin-top: 2rem;
+    width: 100vw;
+    // height: 94vh;
+    // border: 1px solid rgb(50, 7, 243);
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 6rem;
+    left: 0;
+    padding-bottom: 2rem;
+}
+
+.layout_template-export {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    // background-color: #e7ecee
+    // background-color: #006699;
+}
+
+#giffy {
+    width: 6rem;
+}
+
+.table-print {
+    position: relative;
+    color: white;
+    height: 10rem;
+    width: 100%;
+    opacity: 1;
+    // background-color: #006699;
+    // border: 1px solid rgb(50, 7, 243);
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // flex-direction: column;
+    // padding: 5px;
+}
+
+#backImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.tableContent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    // justify-content: stretch;
+    width: 100%;
+    height: 100%;
+    color: white;
+    opacity: 1;
+    // padding: 1rem;
+}
+
+// .backgCol {
 //     width: 100%;
 //     height: 5rem;
-//     background-color: #006699;
-//     justify-content: space-between;
-//     &-logo {
-//         height: 5rem;
-//         padding: 2px;
-//         // background-color: #F05C5A;
-//     }
-// ;
-// &-name {
-//     display: flex;
-//     color: #fff;
-//     // background-color: #F05C5A;
-//     justify-content: center;
-//     flex-direction: column;
-//     align-items: center;
-//     // background-color: rgb(148, 135, 222);
 // }
-//     ;
-//     &-logo_img {
-//         height: 4.5rem;
-//     }
-// }
-// .beachName {
-//     text-transform: uppercase;
-//     font-weight: 400;
-//     // background-color: #F05C5A;
-//     // margin: 2px auto;
-// }
-// .map {
-//     // height: calc(90vh - 21rem - 6rem);
-//     height: 80vh;
-//     width: 100%;
-//     &_mapView {
-//         height: 100%;
-//         width: 100%;
-//     }
-// }
-// .profile__area {
-//     height: 18.2rem;
-//     width: 100%;
-//     &-graph {
-//         height: 100%;
-//         width: 100%;
-//     }
-// }
+.print-header {
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    font-weight: 300;
+    color: white;
+    @include respond(tab-land) {
+        font-size: 1.3rem;
+        letter-spacing: 3px;
+    }
+    @include respond(phone) {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+    @include respond(mini-phone) {
+        font-size: 1.0rem;
+        letter-spacing: 1px;
+    }
+}
+
+@media only print {
+    .print-header {
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+
+.infos {
+    font-size: 1.2rem;
+    display: flex;
+    width: 98%;
+    // justify-content: flex-start;
+    flex-direction: column;
+    // align-items: center;
+    // background-color: red;
+}
+
+#table-print__values {
+    color: white;
+    width: 98%;
+    margin: 5px auto;
+    font-size: 1.0rem;
+    // background-color: #006699;
+    // border: 1px solid rgb(50, 7, 243);
+}
+
+#table-print__values,
+#table-print__values th,
+#table-print__values td {
+    // border: 1px solid black;
+    color: white;
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+
+@media only print {
+    #table-print__values,
+    #table-print__values th,
+    #table-print__values td {
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+
+#table-print__values td {
+    padding: 2px;
+    text-align: center;
+    color: white;
+}
+
+#table-print__values th {
+    /* background-color: #FFC65A; */
+    /* color: white; */
+    color: white;
+    font-size: 1.2rem;
+}
+
+#table-print__values td {
+    /* background-color: #FFC65A; */
+    /* color: white; */
+    color: white;
+    font-size: 1.0rem;
+}
+
+#Tablecanvas {
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: #006699;
+}
+
+#TableImage {
+    width: 100%;
+    height: 100%
+}

@@ -177,7 +177,7 @@
     }
     
     .o-list li img {
-        width: 2rem
+        width: 2rem;
     }
     
     .download-btn {
@@ -203,6 +203,11 @@
         text-decoration: none;
         color: #F05C5A;
         font-weight: 300;
+    }
+    
+    .sub-header {
+        text-transform: initial;
+        font-weight: 700;
     }
     
     // #DHECfooter {

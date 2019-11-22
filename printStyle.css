@@ -1,0 +1,277 @@
+.printContainer {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.printMenu {
+    height: 6rem;
+    width: 100vw;
+    background-color: #aef8df;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5rem;
+    z-index: 900;
+}
+
+@media only screen and (max-width: 75em) {
+    .printMenu {
+        padding-right: 5rem;
+    }
+}
+
+@media only screen and (max-width: 40em) {
+    .printMenu {
+        padding-right: 2rem;
+    }
+}
+
+@media only screen and (max-width: 30.9em) {
+    .printMenu {
+        padding-right: 1rem;
+    }
+}
+
+.printMenu-bar {
+    width: 100%;
+    background-color: #006699;
+    color: #fff;
+    padding: 5px;
+}
+
+.infos {
+    font-size: 1.2rem;
+    display: flex;
+    width: 98%;
+    flex-direction: column;
+}
+
+#table-print__values {
+    color: #fff;
+    width: 98%;
+    margin: 5px auto;
+    font-size: 1.0rem;
+    background-color: #006699;
+}
+
+#table-print__values,
+#table-print__values th,
+#table-print__values td {
+    /* border: 1px solid black; */
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+
+#table-print__values td {
+    padding: 2px;
+    text-align: center;
+}
+
+#table-print__values th {
+    /* background-color: #FFC65A; */
+    /* color: white; */
+    color: #f5efef;
+    font-size: 1.2rem;
+}
+
+#table-print__values td {
+    /* background-color: #FFC65A; */
+    /* color: white; */
+    color: #fff;
+    font-size: 1.0rem;
+}
+
+#Tablecanvas {
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: #006699;
+}
+
+#TableImage {
+    width: 100%;
+    height: 100%;
+}
+
+.infoVolResults,
+.infoBeachName {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#export {
+    padding: 1rem 3rem;
+    margin-left: 1rem;
+    background-color: cadetblue;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    outline: none;
+}
+
+.printInformation {
+    margin-left: 30%;
+    font-size: 1.6rem;
+}
+
+@media only screen and (max-width: 75em) {
+    .printInformation {
+        margin-left: 10%;
+        font-size: 1.3rem;
+    }
+}
+
+@media only screen and (max-width: 40em) {
+    .printInformation {
+        margin-left: 5%;
+        font-size: 1.2rem;
+    }
+}
+
+@media only screen and (max-width: 30.9em) {
+    .printInformation {
+        margin-left: 2%;
+        font-size: 1.0rem;
+    }
+}
+
+@media only screen and (max-width: 21.2em) {
+    .printInformation {
+        margin-left: 1%;
+        font-size: 0.8rem;
+    }
+}
+
+.printContainer {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.printMenu {
+    height: 6rem;
+    width: 100vw;
+    background-color: #aef8df;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5rem;
+    z-index: 900;
+}
+
+@media only screen and (max-width: 75em) {
+    .printMenu {
+        padding-right: 5rem;
+    }
+}
+
+@media only screen and (max-width: 40em) {
+    .printMenu {
+        padding-right: 2rem;
+    }
+}
+
+@media only screen and (max-width: 30.9em) {
+    .printMenu {
+        padding-right: 1rem;
+    }
+}
+
+.infoVolResults,
+.infoBeachName {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#volResultsForPrint {
+    align-self: flex-end;
+    padding-left: 1rem;
+    justify-content: end;
+}
+
+#volResultsForPrint {
+    font-size: 2rem;
+    color: #F05C5A;
+}
+
+#nameOfBeach {
+    margin-left: 1rem;
+}
+
+.printBtn {
+    font-size: 1.6rem;
+    padding: 1rem 3rem;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+@media only screen and (max-width: 40em) {
+    .printBtn {
+        padding: .8rem 2rem;
+        font-size: 1.2rem;
+    }
+}
+
+@media only screen and (max-width: 30.9em) {
+    .printBtn {
+        padding: .8rem 1.5rem;
+        font-size: 1.0rem;
+    }
+}
+
+@media only screen and (max-width: 21.2em) {
+    .printBtn {
+        padding: .5rem 1rem;
+        font-size: .8rem;
+    }
+}
+
+.printBtn:focus {
+    outline-color: none;
+}
+
+.printBtn:first-child {
+    margin-right: 2rem;
+}
+
+@media only screen and (max-width: 40em) {
+    .printBtn:first-child {
+        margin-right: 1rem;
+    }
+}
+
+.printTemplate {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #2c2b2b;
+    width: 80%;
+}

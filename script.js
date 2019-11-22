@@ -1,5 +1,5 @@
 var map, view, graphicsLayer, activeGraphic, graphicsLayerLine, layer_1, layer_2, layer_3, layerList, legend, state, active_transact, pointGraphic, container,
-    selected__contour, contour, Elevation, chart, seriesA, clearContent, addLoader, exp, wind, printWidget, window
+    selected__contour, contour, Elevation, chart, seriesA, clearContent, addLoader, exp, wind, printWidget, window, svg, printUrl, height, Monument, highlight, Activegraphic, selected__year
 
 
 require([
@@ -17,8 +17,12 @@ require([
     "esri/widgets/Track",
     "esri/layers/support/LabelClass",
     "esri/widgets/Print",
-    // "esri/geometry/geometryEngine"
-], function(Map, MapView, FeatureLayer, GraphicsLayer, Graphic, QueryTask, Query, BasemapToggle, Legend, Point, Expand, Track, LabelClass, Print) {
+    "esri/tasks/PrintTask",
+    "esri/tasks/support/PrintTemplate",
+    "esri/tasks/support/PrintParameters",
+    "esri/layers/MapImageLayer"
+
+], function(Map, MapView, FeatureLayer, GraphicsLayer, Graphic, QueryTask, Query, BasemapToggle, Legend, Point, Expand, Track, LabelClass, Print, PrintTask, PrintTemplate, PrintParameters, MapImageLayer) {
 
 
 
@@ -39,8 +43,6 @@ require([
     });
 
 
-
-
     var basemapToggle = new BasemapToggle({
         view: view,
         nextBasemap: "streets"
@@ -53,31 +55,8 @@ require([
         view: view
     });
     view.ui.add(track, "top-left");
+    const layer = view.map.layers.getItemAt(0);
 
-
-    // var print = new Print({
-    //     view: view
-    // });
-    // // Adds widget below other elements in the top left corner of the view
-    // view.ui.add(print, {
-    //     position: "top-left"
-    // });
-
-    // function hideAddressBar() {
-    //     // console.log(document.querySelector('.body').style.width)
-    //     if (document.querySelector('body').style.width <= 600 + 'px') {
-    //         if (document.documentElement.scrollHeight < window.outerHeight / window.devicePixelRatio)
-    //             document.documentElement.style.height = (window.outerHeight / window.devicePixelRatio) + 'px';
-    //         setTimeout(window.scrollTo(1, 1), 0);
-    //         // document.querySelector('.title').style.backgroundColor = 'yellow'
-
-    //     }
-    // }
-
-
-
-    // window.addEventListener("load", function() { hideAddressBar(); });
-    // window.addEventListener("orientationchange", function() { hideAddressBar(); });
 
 
     selected__contour = 'upper'
@@ -86,10 +65,13 @@ require([
     state.getAllYearsPointsForChart = []
     Elevation = [0, 0]
     contour = [0, 0]
+    state.chartPresent = false
+        // state.graph = 'Up' 
+    printUrl = "https://gis.dhec.sc.gov/gisportal/sharing/servers/bb0c7ebbc8f8410f840299bad9b68547/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
 
-    // state.graph = 'Up'
-    state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/0']
+    state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/0']
     state.selected__year = '2014'
+
 
     const beachLabelClass = new LabelClass({
         labelExpressionInfo: { expression: "$feature.NAME" },
@@ -107,74 +89,74 @@ require([
         labelPlacement: "center-right"
     });
     var beachPoints = new FeatureLayer({
-        url: `https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/5`,
+        url: `https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/5`,
         outFields: '*',
+
         labelingInfo: beachLabelClass
     });
+
     map.add(beachPoints);
 
-    // var monument = new FeatureLayer({
-    //     url: "https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/23",
-    //     // outFields: '*',
-    //     // labelingInfo: beachLabelClass
-    // });
-    // map.add(monument);
+    Monument = new MapImageLayer({
+        url: "https://gis.dhec.sc.gov/gisserver/rest/services/environment/Monuments/MapServer",
+    });
+    map.add(Monument)
 
 
     let selected_2014_Layers = [
 
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/2', //transact
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/1', //overLcontig
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/3', //gaps
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/2', //transact
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/1', //overLcontig
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/3', //gaps
 
 
 
     ]
 
     let selected_2015_Layers = [
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/8', //transact
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/7', //overLcontig
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/9', //gaps
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/8', //transact
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/7', //overLcontig
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/9', //gaps
 
     ]
 
     let selected_2016_Layers = [
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/13', //transact
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/12', //overLcontig
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/14', //gaps
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/13', //transact
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/12', //overLcontig
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/14', //gaps
 
     ]
 
     let selected_2017_Layers = [
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/17', //transact
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/16', //overLcontig
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/18', //gaps
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/17', //transact
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/16', //overLcontig
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/18', //gaps
 
     ]
 
     let selected_2018_Layers = [
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/21', //transact
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/20', //overLcontig
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/22', //gaps
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/21', //transact
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/20', //overLcontig
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/22', //gaps
     ]
 
     // let selected_2019_Layers = [
 
-    //     'https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/8',//transact
-    //     'https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/7',//overLcontig
-    //     'https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/9',//gaps
+    //     'https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM/MapServer/8',//transact
+    //     'https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM/MapServer/7',//overLcontig
+    //     'https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM/MapServer/9',//gaps
 
     // ]
 
     let selected_all_Layers = [
 
-        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/10', //all transacts
+        'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/10', //all transacts
 
 
     ]
 
     layerList = [layer_1, layer_2, layer_3]
-        // localStorage.baseURL = JSON.stringify(layerList)
+
 
 
     drawLayers(selected_2014_Layers)
@@ -186,18 +168,21 @@ require([
 
     function drawLayers(year) {
         state.Active_URL = year
+
         reset()
         for (let i = 0; i < year.length; i++) {
             layerList[i] = new FeatureLayer({
                 url: year[i],
                 outFields: '*'
             });
+
             map.add(layerList[i]);
         }
 
 
 
         if (!legend) {
+
             legend = new Expand({
                 content: new Legend({
                     view: view,
@@ -209,10 +194,14 @@ require([
             });
             view.ui.add(legend, "bottom-right");
 
+
+
         } else {
+
             view.ui.remove(legend);
             legend = new Expand({
                 content: new Legend({
+
                     view: view,
                     style: "classic",
                     layout: "auto"
@@ -222,9 +211,13 @@ require([
             });
             view.ui.add(legend, "bottom-right");
 
+
         }
 
+
+
     }
+
 
     clearContent = function() {
         document.querySelector('.graph').innerHTML = ''
@@ -288,18 +281,24 @@ require([
         view.hitTest(event).then(function(response) {
 
             if (response.results.length) {
-                var graphic = response.results.filter(function(result) {
+                Activegraphic = response.results.filter(function(result) {
+
 
                     return result.graphic.layer === beachPoints || result.graphic.layer === layerList[0] || result.graphic.layer === selected_all_Layers;
                 })[0].graphic;
 
 
-                let list = graphic.attributes['NAME'] || graphic.attributes['TRAN_ID'];
+                let list = Activegraphic.attributes['NAME'] || Activegraphic.attributes['TRAN_ID'];
 
-                if (list = graphic.attributes['NAME']) {
+                if (list = Activegraphic.attributes['NAME']) {
 
                     state.selectedBeach = list
-                    view.whenLayerView(graphic.layer).then(function(layerView) {
+                    view.whenLayerView(Activegraphic.layer).then(function(layerView) {
+
+                        if (highlight) {
+                            highlight.remove();
+                        }
+                        highlight = layerView.highlight(Activegraphic);
 
                         graphicsLayer.removeAll()
 
@@ -309,7 +308,7 @@ require([
                     }
 
 
-                    var search = new ProcessBerm()
+                    let search = new ProcessBerm()
 
                     var newquery = search.createQuery(list)
 
@@ -318,7 +317,17 @@ require([
                         search.addPolygonGraphics(results)
 
                     });
-                } else if (list = graphic.attributes['TRAN_ID']) {
+                } else if (list = Activegraphic.attributes['TRAN_ID']) {
+                    view.whenLayerView(Activegraphic.layer).then(function(layerView) {
+
+                        if (highlight) {
+                            highlight.remove();
+                        }
+                        highlight = layerView.highlight(Activegraphic);
+
+                        // graphicsLayer.removeAll()
+
+                    })
                     clearContent()
                     addLoader()
                     reset()
@@ -334,7 +343,7 @@ require([
                     } else if (state.selected__year === 'all') {
                         clearContent()
                         addLoader()
-                        var search = new ProcessBerm()
+                        let search = new ProcessBerm()
 
                         var linequery = search.createTransactQueryAll(list)
 
@@ -372,7 +381,7 @@ require([
 
         var paths = []
 
-        var search = new ProcessBerm();
+        let search = new ProcessBerm();
         const getResolvedPoints = async() => {
             // var search = new ProcessBerm();
             compare2014.push(await search.getAllYearsPointsForChart(list, url_2014))
@@ -391,8 +400,9 @@ require([
 
     active_transact = function(list) {
         if (state.selected__year != 'all') {
-            var search = new ProcessBerm()
-                // console.log(search)
+
+            let search = new ProcessBerm()
+
             var newtranquery = search.createTransactQuery(list)
 
             var sel_ptquery = search.pointsQuery(list, state.transact_points)
@@ -416,11 +426,11 @@ require([
                 for (let i = 0; i < results.features.length; i++) {
                     let pointAttribute = results.features[i].attributes
 
-                    pointx = pointAttribute["POINT_X"];
-                    pointy = pointAttribute["POINT_Y"];
-                    pointelev = pointAttribute["Elevation"];
-                    pointdist = pointAttribute["DFM"];
-                    pointstatid = pointAttribute["STATIC_ID"];
+                    let pointx = pointAttribute["POINT_X"];
+                    let pointy = pointAttribute["POINT_Y"];
+                    let pointelev = pointAttribute["Elevation"];
+                    let pointdist = pointAttribute["DFM"];
+                    let pointstatid = pointAttribute["STATIC_ID"];
                     path.push({ lon: pointx, lat: pointy, y: pointelev, x: pointdist, name: `Elevation: ${pointelev} ft`, statid: pointstatid });
                 }
 
@@ -429,7 +439,7 @@ require([
             });
         } else if (state.selected__year === 'all') {
 
-            var search = new ProcessBerm()
+            let search = new ProcessBerm()
 
             var linequery = search.createTransactQueryAll(list)
 
@@ -443,16 +453,6 @@ require([
             plotLineGraph(list)
         }
     }
-
-
-
-    // wind = function() {
-
-
-
-    // if (typeof(highchartsExport) === 'undefined') {
-    //     window.highchartsExport = new ExportInitializator();
-    // }
 
 
 
@@ -754,13 +754,12 @@ require([
             ///////////////////////////////////////
 
             series: [{ name: 'Elevation', data: data, color: '#ddcbbb', negativeFillColor: '#99d0f3' }],
-            // seriesA = chart.series[0].name === 'Elevation'
-            // }
+
         });
 
 
 
-        // console.log(chart.series[0].name)
+
     }
 
 
@@ -909,23 +908,23 @@ require([
 
 
 
-    // function Toggleprint() {
-    //     $(document).ready(function() {
+    function Toggleprint() {
+        $(document).ready(function() {
 
 
-    //         $('.print__main').width(20 + 'vw')
-    //             // $('.print__main').height(40 + 'vh')
-    //         $('.print__main').slideToggle(200)
+            // $('.print__main').width(40 + 'rem')
+            // $('.print__main').height(40 + 'vh')
+            $('.print__main').slideToggle(200)
 
-    //         let isPositionUp = document.getElementById('print').classList.toggle('item-u')
-    //         if (!isPositionUp) {
-    //             document.getElementById('print').style.backgroundColor = "#F05C5A";
-    //         } else {
-    //             document.getElementById('print').style.backgroundColor = "transparent";
-    //         }
+            let isPositionUp = document.getElementById('print').classList.toggle('item-u')
+            if (!isPositionUp) {
+                document.getElementById('print').style.backgroundColor = "#F05C5A";
+            } else {
+                document.getElementById('print').style.backgroundColor = "transparent";
+            }
 
-    //     })
-    // }
+        })
+    }
 
 
 
@@ -973,7 +972,7 @@ require([
 
 
 
-            var pointUrl = `https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/${layerList[0].layerId}`;
+            var pointUrl = `https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/${layerList[0].layerId}`;
             var tranqueryTask = new QueryTask({
                 url: pointUrl
             });
@@ -995,7 +994,7 @@ require([
         }
         createTransactQueryAll(list) {
 
-            var transactUrl = `https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/10`;
+            var transactUrl = `https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/10`;
             var tranqueryTask = new QueryTask({
                 url: transactUrl
             });
@@ -1014,7 +1013,7 @@ require([
             }
         }
         createQuery(list) {
-            var pointUrl = "https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/4";
+            var pointUrl = "https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/4";
             var queryTask = new QueryTask({
                 url: pointUrl
             });
@@ -1128,22 +1127,27 @@ require([
             var sel_ptquery = this.pointsQuery(list, url)
 
             return sel_ptquery.ptqueryTask.execute(sel_ptquery.ptquery).then((results) => {
-                let path = []
+                try {
+                    let path = []
 
-                state.active__points = results
-                state.transactID = results.features[0].attributes
-                for (let i = 0; i < results.features.length; i++) {
-                    let pointAttribute = results.features[i].attributes
-                    pointx = pointAttribute["POINT_X"];
-                    pointy = pointAttribute["POINT_Y"];
-                    pointelev = pointAttribute["Elevation"];
-                    pointdist = pointAttribute["DFM"];
-                    pointstatid = pointAttribute["STATIC_ID"];
-                    path.push({ lon: pointx, lat: pointy, y: pointelev, x: pointdist, name: `Elevation: ${pointelev} ft`, statid: pointstatid });
+                    state.active__points = results
+                    state.transactID = results.features[0].attributes
+                    for (let i = 0; i < results.features.length; i++) {
+                        let pointAttribute = results.features[i].attributes
+                        let pointx = pointAttribute["POINT_X"];
+                        let pointy = pointAttribute["POINT_Y"];
+                        let pointelev = pointAttribute["Elevation"];
+                        let pointdist = pointAttribute["DFM"];
+                        let pointstatid = pointAttribute["STATIC_ID"];
+                        path.push({ lon: pointx, lat: pointy, y: pointelev, x: pointdist, name: `Elevation: ${pointelev} ft`, statid: pointstatid });
+                    }
+
+
+                    return path
+                } catch (err) {
+                    return
                 }
 
-
-                return path
             });
 
 
@@ -1156,14 +1160,13 @@ require([
         let down = e.target.closest('.b-down')
         let print = e.target.closest('#print')
         let help = e.target.closest('#help')
-            // let exportMap = e.target.closest('#submitBtn')
+
         if (list) {
             clearContent()
             addLoader()
-            state.selectedBeach = list.innerHTML
-            var search = new ProcessBerm()
-            var newquery = search.createQuery(list.innerHTML)
-            SlideDownVolumeBtn()
+            if (highlight) {
+                highlight.remove();
+            }
             if (graphicsLayer) {
                 graphicsLayer.removeAll();
 
@@ -1172,6 +1175,12 @@ require([
             if (graphicsLayerLine) {
                 graphicsLayerLine.removeAll()
             }
+            state.selectedBeach = list.innerHTML
+            let search = new ProcessBerm()
+            var newquery = search.createQuery(list.innerHTML)
+            SlideDownVolumeBtn()
+
+
             if (state.graph === 'Up') {
                 graphSlidedown()
                 state.graph = 'Down'
@@ -1211,85 +1220,10 @@ require([
             Toggleprint()
 
 
+
         }
-
-
-
-
     })
 
-
-
-
-    function Toggleprint() {
-        $(document).ready(function() {
-
-
-            let isPositionUp = document.getElementById('print').classList.toggle('item-u')
-
-            if (!isPositionUp) {
-
-                view.when(function() {
-                    printWidget = new Print({
-                        view: view,
-                        // specify your own print service
-                        // printServiceUrl: "https://gis.dhec.sc.gov/gisserver/rest/services/environment/bermTemplate/GPServer/Export%20Web%20Map"
-                        printServiceUrl: "https://gis.dhec.sc.gov/gisserver/rest/services/environment/printMimic/GPServer/Export%20Web%20Map"
-                    });
-
-
-                    // canvas.height= printWidget.templateOptions.height
-                    // canvas.width= printWidget.templateOptions.width
-
-                    if (window.chart) {
-
-                        // console.log(window.chart)
-                        // let ht = $('.print__main-preview').height()
-                        // let wd = $('.print__main-preview').width()
-
-                        var svg = window.chart.getSVG({
-                                exporting: {
-                                    sourceHeight: 200,
-                                    sourceWidth: printWidget.templateOptions.width
-                                }
-                            })
-                            // console.log(svg)
-                            // let canvas = document.createElement('canvas')
-                            // let canvas = `<canvas id="canvas></canvas>`
-                            // canvas.id = 'canvas'
-                        let canvas = document.getElementById("canvas")
-
-                        // console.log(canvg(document.getElementById("canvas"), svg))
-                        canvg(canvas, svg)
-                            // console.log(canvas)
-                            // var image = canvas.toDataURL("image/png")
-
-                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
-                        // document.write('<img src="' + image + '"/>');
-
-                        // window.location.href = image
-                        // document.write('<img src="./image/' + image + '"/>');
-                        // console.log(svg)
-                        // printWidget.templateOptions.title = window.location
-                        console.log(printWidget)
-                        view.ui.add(printWidget, "top-right");
-
-
-                    } else {
-                        view.ui.add(printWidget, "top-right");
-                    }
-
-
-                });
-                document.getElementById('print').style.backgroundColor = "#F05C5A";
-            } else {
-                document.getElementById('print').style.backgroundColor = "transparent";
-
-                view.ui.remove(printWidget);
-            }
-
-        })
-    }
 
 
 
@@ -1297,33 +1231,48 @@ require([
 
     function reset() {
         if (chart) {
-            document.getElementById('upper').checked = true
-            document.getElementById('lower').checked = false
-            chart.xAxis[0].removePlotLine(`myPlotLineId${contour[0]}`);
-            chart.xAxis[0].removePlotLine(`myPlotLineId${contour[1]}`);
-            selected__contour = 'upper'
-            Elevation = [0, 0]
-            contour = [0, 0]
+            try {
+                document.getElementById('upper').checked = true
+                document.getElementById('lower').checked = false
+                chart.xAxis[0].removePlotLine(`myPlotLineId${contour[0]}`);
+                chart.xAxis[0].removePlotLine(`myPlotLineId${contour[1]}`);
+                selected__contour = 'upper'
+                Elevation = [0, 0]
+                contour = [0, 0]
 
-            document.getElementById('UP__ID').innerHTML = `&mdash;`
-            document.getElementById('UP__ELEV').innerHTML = `&mdash;`
-            document.getElementById('UP__DIST').innerHTML = `&mdash;`
-            document.getElementById('LOW__ID').innerHTML = `&mdash;`
-            document.getElementById('LOW__ELEV').innerHTML = `&mdash;`
-            document.getElementById('LOW__DIST').innerHTML = `&mdash;`
-            document.querySelector('.output').textContent = ''
+                document.getElementById('UP__ID').innerHTML = `&mdash;`
+                document.getElementById('UP__ELEV').innerHTML = `&mdash;`
+                document.getElementById('UP__DIST').innerHTML = `&mdash;`
+                document.getElementById('LOW__ID').innerHTML = `&mdash;`
+                document.getElementById('LOW__ELEV').innerHTML = `&mdash;`
+                document.getElementById('LOW__DIST').innerHTML = `&mdash;`
+                document.querySelector('.output').textContent = ''
+            } catch (err) {
+                return
+            }
+
             if (state.max_contour || state.min_contour) {
-                state.max_contour.Distance = '';
-                state.max_contour.Elevation = '';
-                state.max_contour.id = '';
-                state.min_contour.Distance = '';
-                state.min_contour.Elevation = '';
-                state.min_contour.id = '';
+                try {
+                    state.max_contour.Distance = '';
+                    state.max_contour.Elevation = '';
+                    state.max_contour.id = '';
+                    state.min_contour.Distance = '';
+                    state.min_contour.Elevation = '';
+                    state.min_contour.id = '';
+                } catch (err) {
+                    return
+                }
+
             }
 
 
             if (chart.series[1]) {
-                chart.series[1].remove()
+                try {
+                    chart.series[1].remove()
+                } catch (err) {
+                    return
+                }
+
 
             }
 
@@ -1359,9 +1308,10 @@ require([
                 }
 
 
-                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/0']
+                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/0']
                 drawLayers(selected_2014_Layers)
                 active_transact(state.active_transact)
+
 
             } else if (Year === '2015') {
                 contour = [0, 0]
@@ -1378,9 +1328,10 @@ require([
                 }
 
 
-                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/6']
+                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/6']
                 drawLayers(selected_2015_Layers)
                 active_transact(state.active_transact)
+
 
             } else if (Year === '2016') {
                 contour = [0, 0]
@@ -1396,7 +1347,7 @@ require([
                     graphicsLayerLine.removeAll()
                 }
 
-                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/11']
+                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/11']
                 drawLayers(selected_2016_Layers)
                 active_transact(state.active_transact)
 
@@ -1413,7 +1364,7 @@ require([
                     graphicsLayerLine.removeAll()
                 }
 
-                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/15']
+                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/15']
                 drawLayers(selected_2017_Layers)
                 active_transact(state.active_transact)
 
@@ -1431,7 +1382,7 @@ require([
                     graphicsLayerLine.removeAll()
                 }
 
-                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/19']
+                state.transact_points = ['https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/19']
                 drawLayers(selected_2018_Layers)
                 active_transact(state.active_transact)
 
@@ -1450,10 +1401,6 @@ require([
                     graphicsLayerLine.removeAll()
                 }
 
-                // state.selected__year = Year
-                // state.transact_points=['https://giswebtest.dhec.sc.gov/arcgis/rest/services/environment/BERM16A/MapServer/19']
-                // drawLayers(selected_2019_Layers)
-                // active_transact(state.active_transact)
 
 
 
@@ -1477,11 +1424,11 @@ require([
                 state.selected__year = Year
                     // console.log(state)
                 state.transact_points = [
-                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/0',
-                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/6',
-                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/11',
-                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/15',
-                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM16A/MapServer/19'
+                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/0',
+                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/6',
+                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/11',
+                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/15',
+                    'https://gis.dhec.sc.gov/gisserver/rest/services/environment/BERM/MapServer/19'
 
                 ]
 
@@ -1573,38 +1520,48 @@ require([
         let lower_contour = Math.min.apply(null, Elevation);
 
         new_Array.map((el) => {
+            try {
 
-            newSeries.push({
-                y: el.attributes.Elevation * 1 < lower_contour ? y = lower_contour : y = el.attributes.Elevation * 1,
-                x: el.attributes.DFM
+                newSeries.push({
+                    y: el.attributes.Elevation * 1 < lower_contour ? y = lower_contour : y = el.attributes.Elevation * 1,
+                    x: el.attributes.DFM
 
-            })
+                })
 
-            let Area
-            if ((el.attributes.Elevation * 1) < (lower_contour)) {
-                Area = 0
-            } else {
+                let Area
+                if ((el.attributes.Elevation * 1) < (lower_contour)) {
+                    Area = 0
+                } else {
 
-                Area = (el.attributes.Elevation * 1 - lower_contour) * 1
+                    Area = (el.attributes.Elevation * 1 - lower_contour) * 1
+                }
+
+                const obj = {
+                    area: Area,
+                    DFM: el.attributes.DFM
+                }
+                areaAtEachPoint.push(obj)
+            } catch (err) {
+                return
             }
 
-            const obj = {
-                area: Area,
-                DFM: el.attributes.DFM
-            }
-            areaAtEachPoint.push(obj)
         })
         const computedVolume = []
-        for (let i = 0; i < areaAtEachPoint.length - 1; i++) {
-            let area_1 = areaAtEachPoint[i].area
-            let area_2 = areaAtEachPoint[i + 1].area
-            let distance_1 = areaAtEachPoint[i].DFM
-            let distance_2 = areaAtEachPoint[i + 1].DFM
-            let resultant_distance = distance_2 - distance_1
-            let volume = 0.5 * (area_1 + area_2) * resultant_distance
+        try {
+            for (let i = 0; i < areaAtEachPoint.length - 1; i++) {
+                let area_1 = areaAtEachPoint[i].area
+                let area_2 = areaAtEachPoint[i + 1].area
+                let distance_1 = areaAtEachPoint[i].DFM
+                let distance_2 = areaAtEachPoint[i + 1].DFM
+                let resultant_distance = distance_2 - distance_1
+                let volume = 0.5 * (area_1 + area_2) * resultant_distance
 
-            computedVolume.push(volume)
+                computedVolume.push(volume)
+            }
 
+
+        } catch (err) {
+            return
         }
 
 
@@ -1633,54 +1590,232 @@ require([
 
 
 
+    $(document).ready(function() {
+
+
+        document.getElementById('submitBtn').addEventListener('click', exportMap)
+    })
+
+    function clearGiffy() {
+        document.querySelector('.layout_template-export').innerHTML = ''
+    }
+
+    function exportMap() {
+
+
+        localStorage.setItem("beachName", state.selectedBeach);
+        document.getElementById('submitBtn').innerHTML = 'Generating Print page....'
+        var integerVlaue = document.querySelector('.layout_template-titleinput').value
+        var page_Type = document.querySelector('.layout_template-pagesetupinput').value
+
+        var DPI = parseInt(integerVlaue, 10)
+
+        if (!DPI || DPI === 'NaN') {
+            showAlert('error', 'Bad input for value DPI, Please check')
+            return
+        }
+
+
+        let giffy = document.createElement('img')
+        giffy.id = 'giffy'
+        giffy.src = './img/predefined_loading_4.gif'
+        document.querySelector('.layout_template-export').appendChild(giffy)
+
+
+        if (window.chart) {
+            let resultOfVol = document.querySelector('.output').textContent
+            try {
+                let num = parseInt(resultOfVol, 10);
+                if (num != NaN || num != undefined || num != null) {
+                    let UP__ID = document.getElementById('UP__ID').innerHTML
+                    let UP__ELEV = document.getElementById('UP__ELEV').innerHTML
+                    let UP__DIST = document.getElementById('UP__DIST').innerHTML
+                    let LOW__ID = document.getElementById('LOW__ID').innerHTML
+                    let LOW__ELEV = document.getElementById('LOW__ELEV').innerHTML
+                    let LOW__DIST = document.getElementById('LOW__DIST').innerHTML
+                    let Results = document.querySelector('.output').textContent
+                    let volObj = {
+                        UP__ID,
+                        UP__ELEV,
+                        UP__DIST,
+                        LOW__ID,
+                        LOW__ELEV,
+                        LOW__DIST,
+                        Results
+                    }
+                    localStorage.setItem("volume", JSON.stringify(volObj));
+                }
 
 
 
 
-    // let exportMap = e.target.closest('#submitBtn')
+            } catch (err) {
+                console.log(err)
+            }
+
+            state.chartPresent = true
+            localStorage.setItem("chrtPresent", state.chartPresent);
+
+            if (page_Type === 'A4-Portrait') {
+                page_Type = 793
+                height = 630
+
+
+            } else if (page_Type === 'A4-Landscape') {
+                page_Type = 1122
+                height = 250
+            }
+
+
+            svg = window.chart.getSVG({
+                exporting: {
+                    sourceWidth: page_Type,
+                    sourceHeight: 220
+
+                }
+            })
+            let canvas = document.createElement('canvas')
+            canvas.id = 'canvas'
+
+            canvg(canvas, svg);
+
+            let canToImage = document.createElement('img')
+            canToImage.id = 'canToImage'
+            canToImage.src = canvas.toDataURL("image/png");
+
+
+            localStorage.setItem("chrt", canToImage.src);
 
 
 
-    // document.getElementById('submitBtn').addEventListener('click', function(e) {
-
-    //     // view.when(function() {
-    //     //     var print = new Print({
-    //     //         view: view,
-    //     //         // specify your own print service
-    //     //         printServiceUrl: "https://gis.dhec.sc.gov/gisserver/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
-    //     //     });
-
-    //     //     // Add widget to the top right corner of the view
-    //     //     view.ui.add(print, "top-right");
-    //     // });
 
 
-
-    //     if (window.chart) {
-    //         let ht = $('.print__main-preview').height()
-    //         let wd = $('.print__main-preview').width()
-    //         let svg = window.chart.getSVG({
-    //             exporting: {
-    //                 sourceHeight: ht,
-    //                 sourceWidth: wd
-    //             }
-    //         })
-
-    //         canvg(document.getElementById('canvas'), svg);
-
-    //         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
-    //         // document.write('<img src="' + image + '"/>');
-    //         // console.log(image)
-    //         // window.location.href = image
-    //         // document.write('<img src="./image/' + image + '"/>');
+            let imgCont = document.createElement('div')
+            imgCont.id = 'imgDim'
 
 
-    //     } else {
-    //         showAlert('error', 'Print functionality is still under implementation')
-    //     }
+            var template = new PrintTemplate({
+                format: "PNG8",
+                exportOptions: {
+                    width: 820,
+                    height: height,
+                    dpi: DPI
+                },
+
+                preserveScale: false,
+                attributionVisible: false,
+                layout: 'MAP_ONLY'
+
+            });
+
+            var params = new PrintParameters({
+                view: view,
+                template: template
+            });
+            var printTask = new PrintTask({
+                url: printUrl,
+                async: true
+            });
+
+            async function res(res) {
+
+                await localStorage.setItem("source", res.url);
+                clearGiffy()
+                window.open('print.html')
+                document.getElementById('submitBtn').innerHTML = 'Print'
+            }
+
+            function err(err) {
+                showAlert('error', `${err.name} error:${err.message}. Please try again later`)
+                document.getElementById('submitBtn').innerHTML = 'Print'
+                console.log(err)
+                clearGiffy()
+                return
+            }
+            printTask.execute(params).then(res, err)
 
 
 
-    // })
+
+        } else {
+            state.chartPresent = false
+            localStorage.setItem("chrtPresent", state.chartPresent);
+            if (page_Type === 'A4-Portrait') {
+                page_Type = 793
+                height = 1050
+
+
+            } else if (page_Type === 'A4-Landscape') {
+                page_Type = 793
+                height = 530
+            }
+
+            let imgCont = document.createElement('div')
+            imgCont.id = 'imgDim'
+            var template = new PrintTemplate({
+                format: "PNG8",
+                exportOptions: {
+                    width: 840,
+                    height: height,
+                    dpi: DPI
+                },
+                // outScale: 0.5,
+                preserveScale: false,
+                attributionVisible: false,
+                layout: 'MAP_ONLY'
+
+            });
+
+            var params = new PrintParameters({
+                view: view,
+                template: template
+            });
+            var printTask = new PrintTask({
+                url: printUrl,
+                async: true
+            });
+
+            async function res(res) {
+
+                await localStorage.setItem("source", res.url);
+                clearGiffy()
+                window.open('print.html')
+                document.getElementById('submitBtn').innerHTML = 'Print'
+            }
+
+            function err(err) {
+                showAlert('error', `${err.name} error:${err.message}. Please try again later`)
+                document.getElementById('submitBtn').innerHTML = 'Print'
+                    // console.log(err)
+                clearGiffy()
+                return
+            }
+            printTask.execute(params).then(res, err)
+
+
+
+
+
+        }
+
+
+    }
+
+    document.getElementById('popUp-Close').addEventListener('click', function() {
+        try {
+            document.querySelector('.popup__content').style.display = 'none'
+            document.querySelector('.popup__content').style.visibility = 'hidden'
+            document.querySelector('.popup').style.display = 'none'
+            document.querySelector('.popup').style.visibility = 'hidden'
+        } catch (err) {
+            return
+        }
+
+
+    })
+
+    $(function() {
+        $("#Y2014").draggable({ opacity: 1, helper: "clone", cancel: false, appendTo: '#viewDiv', });
+    })
 
 });
